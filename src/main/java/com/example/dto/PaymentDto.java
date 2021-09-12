@@ -1,7 +1,6 @@
 package com.example.dto;
 
-import com.example.model.Card;
-import com.example.model.CardHolder;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.CascadeType;
@@ -13,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
+@Builder
 public class PaymentDto {
 
     @NotNull

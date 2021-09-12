@@ -4,6 +4,7 @@ import com.example.validation.ExpiryDateConstraint;
 import com.example.validation.LuhnCodeConstraint;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -15,6 +16,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
+@Builder
 public class CardDto {
     @NotBlank(message = "PAN is required.")
     @Size(min = 16, max = 16, message = "PAN should be 16 digits long.")
