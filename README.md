@@ -8,9 +8,10 @@ For building and running the application you need:
 
 ## Running the application locally
 
-Create the file /tmp/audit.json   for storing payments audit
+- Create the file `/tmp/audit.json`   for storing payments audit or change `audit.path property if to use existing file
 
-Execute the `com.example.PaymentGatewayApplication` class from your IDE. 
+- Execute the `com.example.PaymentGatewayApplication` class from your IDE. 
 
-API call examples are in src/main/resources/requests.http
+- API call examples ae in `src/main/resources/requests.http`
 
+- To view db results go to -> http://localhost:8080/h2 with sa/password credentials  

@@ -19,4 +19,4 @@ Content-Type: application/json
 }
 
 ### get payment by invoice id
-GET http://localhost:8080/v1/1234567
+GET http://localhost:8080/v1/12345678
