@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Data
@@ -14,10 +12,8 @@ import java.util.Set;
 @Table(name = "cardholder")
 public class CardHolder {
 
-    @NotBlank(message = "Cart holder name is required.")
     private String name;
     @Id
-    @Email(message = "Invalid cardholder email format.")
     private String email;
 
     @OneToMany(mappedBy = "cardholder")

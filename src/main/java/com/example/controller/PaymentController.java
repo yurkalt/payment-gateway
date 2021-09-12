@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.PaymentDto;
 import com.example.model.Payment;
 import com.example.service.PaymentService;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -8,10 +9,12 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,31 +23,40 @@ import java.util.Map;
 @RequestMapping(value = "/v1")
 public class PaymentController {
 
+    public static final String DOT_IN_FIELD_NAME = ".";
     @Autowired
     private PaymentService paymentService;
 
-    @Validated
     @PostMapping(value = "/submit", consumes =  "application/json")
-    public ResponseEntity<ResponseDTO> submitPayment( @RequestBody Payment payment){
+    public ResponseEntity<ResponseDTO> submitPayment( @Valid @RequestBody PaymentDto payment){
         paymentService.processPayment(payment);
         return ResponseEntity.ok(ResponseDTO.builder().approved(true).build());
     }
 
     @GetMapping("/{invoiceId}")
-    public ResponseEntity<Payment> getPaymentByInvoiceId(@PathVariable String invoiceId){
+    public ResponseEntity<PaymentDto> getPaymentByInvoiceId(@PathVariable String invoiceId){
         return ResponseEntity.ok(paymentService.getPaymentById(invoiceId));
     }
 
-    @ExceptionHandler({ConstraintViolationException.class })
+    @ExceptionHandler({MethodArgumentNotValidException.class })
     public ResponseEntity<ResponseDTO> handleValidationExceptions(
-            ConstraintViolationException ex) {
+            MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-            ex.getConstraintViolations().forEach((violation) -> {
-                String fieldName = violation.getPropertyPath().toString();
-                String errorMessage = violation.getMessage();
+            ex.getBindingResult().getAllErrors().forEach((error) -> {
+                String fieldName = ((FieldError) error).getField();
+                fieldName = removeParentName(fieldName);
+                String errorMessage = error.getDefaultMessage();
                 errors.put(fieldName, errorMessage);
             });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseDTO.builder().approved(false).errors(errors).build());
+    }
+
+    private String removeParentName(String fieldName) {
+        if (fieldName.contains(DOT_IN_FIELD_NAME)) {
+            int index = fieldName.indexOf(".") + 1;
+            fieldName = fieldName.substring(index);
+        }
+        return fieldName;
     }
 
     @Data
