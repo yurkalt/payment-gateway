@@ -1,11 +1,16 @@
 # payment-gateway
+
 ## Requirements
 
 For building and running the application you need:
 
-- [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 
 ## Running the application locally
 
-There are several ways to run a Spring Boot application on your local machine. One way is to execute the `main` method in the `com.example.PaymentGatewayApplication` class from your IDE.
+Create the file /tmp/audit.json   for storing payments audit
+
+Execute the `com.example.PaymentGatewayApplication` class from your IDE. 
+
+API call examples are in src/main/resources/requests.http
 
